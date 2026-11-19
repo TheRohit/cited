@@ -1,0 +1,26 @@
+[package]
+name = "cited"
+version = "0.1.0"
+edition = "2024"
+description = "A finding is a witness. Machine-checkable evidence for AI findings: every quote must re-read at a pinned snapshot. No model required."
+license = "MIT"
+repository = "https://github.com/TheRohit/cited"
+keywords = ["code-review", "ai", "evidence", "verification", "citations"]
+categories = ["command-line-utilities", "development-tools"]
+
+[lib]
+name = "cited"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cited"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+regex = "1"
+
+[dev-dependencies]
+tempfile = "3"

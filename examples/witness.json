@@ -1,0 +1,18 @@
+{
+  "witness": 1,
+  "title": "Team roles are assigned but never persisted",
+  "repos": { "head": "64c73f816d40bd25ccb345e010191d9ba76200a0", "base": "6a4b7cf0cd7a2f1f20aeebd3d35bf27bb6500a14" },
+  "precondition": "a team exists; the caller is an admin",
+  "input": "PATCH /teams/:id with role_ids",
+  "path": [
+    { "symbol": "TeamsController#update", "file": "app/controllers/teams_controller.rb", "lines": [4, 8],
+      "quote": "team.assign_roles(params[:role_ids])\n    render json: team",
+      "effect": "assigns roles in memory, then renders without saving" },
+    { "symbol": "Team#assign_roles", "file": "app/models/team.rb", "lines": [2, 4],
+      "quote": "self.role_ids = ids", "edge": { "kind": "call", "via": "team.assign_roles(" },
+      "effect": "mutates role_ids on the in-memory record only" }
+  ],
+  "observed": "the response shows the new roles; the database still has the old ones",
+  "expected": { "statement": "the controller saves the team after assigning roles",
+    "source": { "kind": "base-behavior", "file": "app/controllers/teams_controller.rb", "lines": [6, 7], "quote": "team.save!" } }
+}
